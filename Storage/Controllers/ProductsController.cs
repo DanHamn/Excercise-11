@@ -38,21 +38,19 @@ namespace Storage.Controllers
                 });
 
             return View(nameof(Index), await query.ToListAsync());
-            
+
         }
 
         public async Task<IActionResult> ShortList()
         {
 
-            int totalPrice = new();
-            await _context.Product.Select(e => e.Price).ForEachAsync(i => totalPrice += i);
             var list = _context.Product.Select(e => new ProductViewModel
             {
+                Id = e.Id,
                 Name = e.Name,
                 Price = e.Price,
                 Count = e.Count,
-                InventoryValue = totalPrice
-
+                InventoryValue = e.Price * e.Count
             });
 
             return View(await list.ToListAsync());
